@@ -8,5 +8,28 @@
     </head>
     <body>
         
+        <div class="po"></div>
+        
+        <script>
+
+            function myPromise(res){
+                // document.getElementById("po").innerHTML = res;
+                console.log(res)
+            }
+            let po = new Promise((resolve,reject)=>{
+                let x=10;
+                if(x!==10){
+                    resolve("Yes This is Right");
+                }
+                {
+                    reject("This is Wrong");
+                }
+            });
+            po.then(
+                function(value){myPromise(value);},
+                function(error){myPromise(error)}
+            )
+            //console.log(po)
+        </script>
     </body>
 </html>
