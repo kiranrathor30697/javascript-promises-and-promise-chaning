@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Student Api</title>
+        <title>Put/Edit Student Api</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -43,19 +43,26 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary k_hide">Save changes</button>
+                        
                     </div>
                 </div>
                 </div>
             </div>
 
+            <!--Edit Students Modal  -->
+              
+              <!-- Modal -->
+
+
         <script>
 
             var loader = document.querySelector('.k_loader');
+            var saveBtn = document.querySelector('.k_hide');
 
             let btnClick = ()=>{
   
                loader.classList.remove('invisible');
-
 
                 //alert("clicked")
                 fetch('http://localhost:1337/api/students')
@@ -85,7 +92,7 @@
                                     <td>`+cv.attributes.subject+`</td>
                                     <td>
                                         <button class="btn btn-success btn-sm k_view" data-bs-toggle="modal" data-bs-target="#exampleModal" >View</button>
-                                        <button class="btn btn-info btn-sm k_edit">Edit</button>
+                                        <button class="btn btn-info btn-sm k_edit" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
                                         <button class="btn btn-danger btn-sm k_del">Delete</button>    
                                     </td>
                                  </tr>`
@@ -103,8 +110,10 @@
             document.body.addEventListener('click',(e)=>{
                 //alert('itsokk')
                 let action_btn = e.target.classList[3];
-                if(action_btn == "k_view"){
+                if(((action_btn) == "k_edit") || ((action_btn == "k_view"))){
                     //alert("View");
+
+                   
                     let v_data = e.target.closest('tr');
                     //console.log(view_data);
 
@@ -127,8 +136,38 @@
                     document.querySelector(".k_item5").innerHTML = subject;
                         
 
-                }else if(action_btn == "k_edit"){
+                }
+                
+                if((action_btn) == "k_edit"){
+                    saveBtn.classList.add('invisible');
                     //alert("Edit");
+                    //alert(saveBtn)
+                    saveBtn.innerHTML = "Edit Student"
+
+                    let edit_id = e.target.closest('tr').querySelector('td:first-child').innerHTML;
+                    let name = document.querySelector('.k_item3')
+                    //console.log(name);
+                    //console.log(edit_id);
+                    let mydata = {
+                        id : edit_id,
+                        name 
+                    }
+                    // fetch('http://localhost:1337/api/students/'+edit_id,{
+                    //     method:PUT,
+                    //     Headers:{
+                    //         accept: 'application/json',
+                    //         'Content-Type':' application/json'
+                    //     }
+                        
+                    // })
+                    // .then(response=>response.json())
+                    // .then((data)=>{
+                    //     //console.log(data)
+                    //     console.log('kjkjgtgdfghjk')
+                    // })
+                    // .catch((err)=>{
+                    //     console.log(err)
+                    // })
 
                 }else if(action_btn == "k_del"){
                     alert("Delete");
