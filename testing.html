@@ -34,6 +34,7 @@
             </div>
         </div>
         <button class="btn btn-success">Get Some Data</button>
+        
         <div class="d-flex justify-content-center k_spiner">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -93,14 +94,14 @@
                                                 `+currentElement.rating.rate+`
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View</button>
-                                            <button class="btn btn-sm btn-primary">Edit</button>
-                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                            <button class="btn btn-sm btn-success k_view_btn">View</button>
+                                            <button class="btn btn-sm btn-primary k_edit_btn">Edit</button>
+                                            <button class="btn btn-sm btn-danger k_delete_btn">Delete</button>
                                         </td>
                                             
                                     </tr>`                   
                         });
-                        console.log(tr);
+                        //console.log(tr);
                         document.querySelector('table > tbody').innerHTML = tr;
                     });
                 })
@@ -111,13 +112,16 @@
 
             });
 
-            // document.addEventListener('click',function(e){
-            //     console.log(e);
-            //     //alert('OKOKO');
-            //     console.log(e.target.closest('tr'));
+            document.addEventListener('click',function(e){
+                //alert('OKOKO');
+                //console.log(e);
+                //console.log(e.target.classList[3]);
+                view_btn = e.target.classList[3];
+                console.log(view_btn);
+                //console.log(e.target.closest('tr'));
                 
 
-            // });
+            });
         </script>
     </body>
 </html>
