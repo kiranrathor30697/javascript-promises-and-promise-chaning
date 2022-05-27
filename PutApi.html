@@ -9,6 +9,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <!-- http://localhost:1337/api/students -->
@@ -26,7 +28,7 @@
             <!--View Button Modal -->
             
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
+                <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">View Student Data</h5>
@@ -50,9 +52,59 @@
                 </div>
             </div>
 
+
+
             <!--Edit Students Modal  -->
               
               <!-- Modal -->
+
+
+
+              <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Student Edit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                              <label for="id" for="id" class="form-label">Id</label>
+                              <input type="text" name="id" class="form-control a_title" id="e_id">
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="name" class="form-label">Name</label>
+                              <input type="text" name="name" class="form-control a_title" id="e_name">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="surname" class="form-label">Surname</label>
+                                <input type="text" name="surname" class="form-control a_title" id="e_surname">
+                              </div>
+
+                              <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="text" name="age" class="form-control a_title" id="e_age">
+                              </div>
+
+                              <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" name="subject" class="form-control a_title" id="e_subject">
+                              </div>
+
+                           
+                            <button type="submit" class="btn btn-primary k_update">Update</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Update changes</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
 
 
         <script>
@@ -92,7 +144,7 @@
                                     <td>`+cv.attributes.subject+`</td>
                                     <td>
                                         <button class="btn btn-success btn-sm k_view" data-bs-toggle="modal" data-bs-target="#exampleModal" >View</button>
-                                        <button class="btn btn-info btn-sm k_edit" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                                        <button class="btn btn-info btn-sm k_edit" data-bs-toggle="modal" data-bs-target="#exampleModal2">Edit</button>
                                         <button class="btn btn-danger btn-sm k_del">Delete</button>    
                                     </td>
                                  </tr>`
@@ -110,67 +162,88 @@
             document.body.addEventListener('click',(e)=>{
                 //alert('itsokk')
                 let action_btn = e.target.classList[3];
-                if(((action_btn) == "k_edit") || ((action_btn == "k_view"))){
+                if((action_btn) == "k_view"){
                     //alert("View");
 
                    
                     let v_data = e.target.closest('tr');
                     //console.log(view_data);
 
-                    let id = v_data.querySelector('td:first-child').innerHTML;
+                    var id = v_data.querySelector('td:first-child').innerHTML;
                     let name = v_data.querySelector('td:nth-child(2)').innerHTML;
                     let surname = v_data.querySelector('td:nth-child(3)').innerHTML;
                     let age = v_data.querySelector('td:nth-child(4)').innerHTML;
                     let subject = v_data.querySelector('td:nth-child(5)').innerHTML;
-
-                    //  console.log(id);
-                    //  console.log(name);
-                    // console.log(surname);
-                    // console.log(age);
-                    // console.log(subject);
 
                     document.querySelector(".k_item1").innerHTML = id;
                     document.querySelector(".k_item2").innerHTML = name;
                     document.querySelector(".k_item3").innerHTML = surname;
                     document.querySelector(".k_item4").innerHTML = age;
                     document.querySelector(".k_item5").innerHTML = subject;
-                        
-
                 }
                 
                 if((action_btn) == "k_edit"){
-                    saveBtn.classList.add('invisible');
-                    //alert("Edit");
-                    //alert(saveBtn)
-                    saveBtn.innerHTML = "Edit Student"
-
+                    
                     let edit_id = e.target.closest('tr').querySelector('td:first-child').innerHTML;
-                    let name = document.querySelector('.k_item3')
-                    //console.log(name);
-                    //console.log(edit_id);
-                    let mydata = {
-                        id : edit_id,
-                        name 
-                    }
-                    // fetch('http://localhost:1337/api/students/'+edit_id,{
-                    //     method:PUT,
-                    //     Headers:{
-                    //         accept: 'application/json',
-                    //         'Content-Type':' application/json'
-                    //     }
-                        
-                    // })
-                    // .then(response=>response.json())
-                    // .then((data)=>{
-                    //     //console.log(data)
-                    //     console.log('kjkjgtgdfghjk')
-                    // })
-                    // .catch((err)=>{
-                    //     console.log(err)
-                    // })
+                    let edit_name = e.target.closest('tr').querySelector('td:nth-child(2)').innerHTML;
+                    let edit_surname = e.target.closest('tr').querySelector('td:nth-child(3)').innerHTML;
+                    let edit_age = e.target.closest('tr').querySelector('td:nth-child(4)').innerHTML;
+                    let edit_subject = e.target.closest('tr').querySelector('td:nth-child(5)').innerHTML;
+                    
+                    // console.log(edit_id);
+                    // console.log(edit_name);
+                    // console.log(edit_surname);
+                    // console.log(edit_age);
+                    // console.log(edit_subject);
+
+                    document.querySelector('#e_id').value = edit_id;
+                    document.querySelector('#e_name').value = edit_name;
+                    document.querySelector('#e_surname').value = edit_surname;
+                    document.querySelector('#e_age').value = edit_age;
+                    document.querySelector('#e_subject').value = edit_subject;
+
+                        document.querySelector('.k_update').addEventListener('click',(e)=>{
+                            e.preventDefault();
+
+                            let edit_id = document.querySelector('#e_id').value 
+                            let edit_name = document.querySelector('#e_name').value
+                            let edit_surname = document.querySelector('#e_surname').value 
+                            let edit_age = document.querySelector('#e_age').value 
+                            let edit_subject = document.querySelector('#e_subject').value 
+
+                            // console.log(edit_name);
+
+                            var mydata = {
+                                //id : edit_id,
+                                name : edit_name,
+                                surname : edit_surname,
+                                age : edit_age,
+                                subject : edit_subject,
+                            }
+                            //onsole.log(mydata)
+                           
+
+                            fetch('http://localhost:1337/api/students/'+edit_id,{
+                                method:'PUT',
+                                headers:{
+                                    'content-type': 'application/json'
+                                },
+                                "data":mydata,
+                                body:JSON.stringify(mydata)
+                            })
+                            .then(response=>response.json())
+                            .then((data)=>{
+                                console.log(data)
+                            })
+                            .catch((err)=>{
+                                console.log(err)
+                            })
+
+                        })
+
 
                 }else if(action_btn == "k_del"){
-                    alert("Delete");
+                    //alert("Delete");
 
                     swal({
                         title: "Are you sure? Delete This Data And Reload This Page",
