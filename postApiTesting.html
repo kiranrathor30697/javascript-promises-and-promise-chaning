@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1 class="text-center">Post Data</h1>
+            <form id="myaddform" class="myform">
+                <div class="mb-3 myform2 invisible">
+                    <label for="exampleInputId" class="form-label ">id</label>
+                    <input type="number" name="id" class="form-control r_id" id="exampleInputId">
+                </div>
+                <div class="mb-3 myform2">
+                    <label for="exampleInputName" class="form-label ">Name</label>
+                    <input type="text" name="name" class="form-control r_Edit1" id="exampleInputName">
+                </div>
+                <div class="mb-3 myform2">
+                    <label for="exampleInputEmail" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control r_Edit2" id="exampleInputEmail">
+                </div>
+                <div class="mb-3 myform2">
+                    <label for="exampleInputPassword" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control r_Edit3" id="exampleInputPassword">
+                </div>
+                
+            
+                <button type="submit" class="btn btn-primary col-12 R_submit a_update R_update" data-mydata="mydata">Submit</button><br><br>
+                <!-- <button type="submit" class="btn btn-primary col-12 a_update invisible"  data-mydata="mydata">Update</button> -->
+            </form>
+            <br>
+            <hr>
+
+            <h1 class="text-center">GET Data</h1>
+
+            <div class="d-flex justify-content-center myspinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <hr>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table> 
+        </div>
+    
+        
+        
+
+        <script>
+            
+            var baseUrl = "https://mycruddjangoapp.herokuapp.com";
+            //var baseUrl ="https://5d78-223-236-40-39.ngrok.io"
+
+            var spinner = document.querySelector(".myspinner");
+            var updatebtn = document.querySelector(".a_update");
+            var update = "Update";
+
+            let x = new Promise(function(resolve,reject){
+                axios.get(baseUrl+'/api/user/').then(function(response){
+                    //console.log('producing data',response);
+                    if(response.status == 200){
+                        resolve(response.data);
+                    }else{
+                        reject('error');
+                    }
+                });
+            });
+
+            x.then(function(data){
+                //console.log('consuming data',data.data);
+                var tr = "";
+                data.forEach(element => {
+                    //console.log(element);
+                    tr += ` <tr>
+                                <td>`+element.id+`</td>
+                                <td>`+element.name+`</td>
+                                <td>`+element.email+`</td>
+                                <td>`+element.password+`</td>
+                                <td>
+                                    <button class="r_editbtn">Edit</button>
+                                    <button class="r_delbtn">Delete</button>  
+                                </td>
+                            </tr>
+                        `;
+                });                           
+                document.querySelector("table > tbody").innerHTML = tr;
+                spinner.classList.add("invisible");
+            }).catch(function(){
+                //console.log(error);
+            });
+
+            document.getElementById("myaddform").onsubmit = function(e){
+                e.preventDefault();
+                //console.log(e.target.querySelector(".a_update").innerHTML)
+                if(e.target.querySelector(".R_submit").innerHTML == "Submit"){
+                    //alert("okok");
+                    //console.log(e)
+                    //console.log(e.target.querySelector('[name="name"]').value);
+                    var name = e.target.querySelector('[name="name"]').value;
+                    //console.log(e.target.querySelector('[name="email"]').value);
+                    var email = e.target.querySelector('[name="email"]').value;
+                    //console.log(e.target.querySelector('[name="password"]').value);
+                    var pwd = e.target.querySelector('[name="password"]').value;
+
+                    var mydata = {
+                            "name": name,
+                            "email": email,
+                            "password": pwd
+                        }
+                    fetch(baseUrl+'/api/user/',{
+                        method:"POST",
+                        headers: {
+                            'Accept': 'application/json, text/plain',
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(mydata),
+
+                    }).then(response => response.json())
+                    .then(data => {
+                        //console.log('Success:', data);
+                        swal("Good job!", "Data Add SuccessFully", "success");
+                        
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        swal("Bad Request!", "Data Not Add", "error");
+                    });
+                }else{
+                    
+                    //alert("error");
+                    
+                    //console.log(document.querySelector("table >tbody > tr >td").innerHTML)
+                    //alert('OKOKOKOKOKO');
+                
+                    //Before calling the api request we must collect all the updated information
+                    //console.log(document.querySelector('.myform > .myform2 > input.r_Edit1').value); // Get
+                    let id = document.querySelector('.myform > .myform2 > input.r_id').value;
+                    let name = document.querySelector('.myform > .myform2 > input.r_Edit1').value; // SET
+                    let email = document.querySelector('.myform > .myform2 > input.r_Edit2').value;
+                    let pwd1 = document.querySelector('.myform > .myform2 > input.r_Edit3').value;
+    
+                    console.log(id);
+                    //console.log(email);
+                    //console.log(pwd1);
+                    
+                    //console.log(id1);
+                
+                    var putdata = {
+                        "id": id ,
+                        "name" :name,
+                        "email" : email,
+                        "password" : pwd1
+                    }
+    
+                                
+                    fetch(baseUrl+'/api/user/'+id+'/', {
+                        method: 'PUT', 
+                        body: putdata,
+                        headers: {
+                            'Content-Type': 'application/json',
+                    },
+                        body: JSON.stringify(putdata),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        //console.log('Success:', data);
+                        swal("Good job!", "Data Update Successfully", "success");
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        swal("Bad Request!", "Data Not Update", "error");
+                    });
+                    //alert('okok');
+                
+                }
+                  
+            }
+           
+
+            document.addEventListener('click',function(e){
+                //console.log(e.target.classList.contains("r_editbtn"))
+                if(e.target.classList.contains("r_editbtn")){
+                    //console.log(document.querySelector('.myform > button').innerHTML = update)
+                    document.querySelector('.myform > button').innerHTML = update;
+                    //updatebtn.classList.remove("invisible");
+                    //console.log(e.target.closest("tr").querySelector('td:nth-child(2)').innerHTML);
+                    //console.log(e.target.closest("tr").querySelector('td:nth-child(3)').innerHTML);
+                    //console.log(e.target.closest("tr").querySelector('td:nth-child(4)').innerHTML);
+                    console.log(e.target.closest("tr").querySelector("td:first-child").innerHTML)
+                    var id = e.target.closest("tr").querySelector("td:first-child").innerHTML;
+                    var name = e.target.closest("tr").querySelector('td:nth-child(2)').innerHTML;
+                    var email = e.target.closest("tr").querySelector('td:nth-child(3)').innerHTML;
+                    var pwd = e.target.closest("tr").querySelector('td:nth-child(4)').innerHTML;
+                    //console.log(document.querySelector('.myform > .myform2 > input.r_Edit1').innerHTML =name1);
+                    //console.log(document.querySelector('.myform > .myform2 > input.r_Edit2').innerHTML =email);
+                    //console.log(document.querySelector('.myform > .myform2 > input.r_Edit3').innerHTML =pwd);
+
+
+                    document.querySelector('.myform > .myform2 > input.r_id').value = id;
+                    document.querySelector('.myform > .myform2 > input.r_Edit1').value = name;
+                    document.querySelector('.myform > .myform2 > input.r_Edit2').value =email;
+                    document.querySelector('.myform > .myform2 > input.r_Edit3').value =pwd;
+                }
+
+               //console.log(e.target.closest('tr').querySelector('td.last-child').innerHTML)
+
+                //console.log(e.target.classList.contains("r_delbtn"));
+                
+                if(e.target.classList.contains("r_delbtn")){
+                    //alert('okokokokokok');
+                    
+                    //console.log(e.target.classList.contains("r_delbtn"))
+                    var id = e.target.closest("tr").querySelector("td:first-child").innerHTML;
+
+
+                    //using fatch api 
+                    // fetch(baseUrl+'/api/user/'+id+'/',{ 
+                    //     method: 'DELETE'
+                    
+                    // })
+                    // .then(response => response.json())
+                    // .then(data => {
+                    //     console.log('Success:', data);
+                       
+                    //     swal("Good job!", "You clicked the button!", "success");
+                    // })
+                    // .catch((error) => {
+                    //     //console.error('Error:', error);
+                    // });
+                    
+
+                    //using axios 
+
+                    axios.delete(baseUrl+'/api/user/'+id+'/').then(function(response){
+                        //console.log("response",response);
+                        if(response.status == 204){
+                            //console.log("done");
+                            swal({
+                                title: "Are you sure?",
+                                text: "Delete your data",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    swal("Data Delete Successully", {
+                                    icon: "success",
+                                    });
+                                    location.reload();
+                                } else {
+                                    swal("Your imaginary file is safe!");
+                                }
+                            });
+                        }
+                    }).catch(function(error){
+                        //console.log(error);
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

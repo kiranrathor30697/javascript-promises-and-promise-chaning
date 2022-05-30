@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CRUD Operations</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <form class="offset-4 w-25 border bg-dark p-3 rounded mt-5">
+
+            <h1 class="text-white text-center mt-3
+            ">Registration Form</h1>
+
+            <div class="mb-3">
+              <label for="fname" class="text-white" for="fname" class="form-label">First Name</label>
+              <input type="text" name="fname" onchange="handleChange()" class="form-control a_title" id="fname" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="lname" class="text-white" class="form-label">Last Name</label>
+              <input type="text" onchange="handleChange()" name="lname" class="form-control a_title" id="lname" required>
+            </div>
+
+            <div class="mb-3">
+
+                <label for="gender" class="text-white" class="form-label">Female</label>
+                <input type="radio" name="gender" id="female" value="female" onclick="handleChange()"><br />
+                <label for="gender" class="text-white" class="form-label">Male</label>
+                <input type="radio" name="gender" id="male" value="male" onclick="handleChange()">
+            </div>
+  
+            <div class="mb-3">
+                <label for="email" class="text-white" class="form-label">Email Address</label>
+                <input type="email" name="email" onchange="handleChange()" class="form-control a_title" id="email" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="text-white" class="form-label">Password</label>
+                <input type="password" name="password" onchange="handleChange()" class="form-control a_title" id="password" required>
+              </div>
+
+              <button type="submit" id="reg_btn" class="btn btn-success d-grid gap-2 mx-auto mt-5">Get Data</button>
+        </form>
+
+        <script>
+
+            let handleChange = ()=>{
+                //console.log("changed");
+                let fname = document.getElementById('fname').value;
+                let lname = document.getElementById('lname').value;
+                let email = document.getElementById('email').value;
+                let password = document.getElementById('password').value;
+                // let radiobtn1 = document.getElementById('female').value;
+                // let radiobtn2 = document.getElementById('male').value;
+                // console.log(radiobtn1);
+                // console.log(radiobtn2);
+               
+            }
+            // var gender = document.getElementsByName('gender');
+            document.getElementById('reg_btn').addEventListener('click',(e)=>{
+                e.preventDefault()
+                console.log("okoko");
+            
+                
+                let fn = document.querySelector('#fname').innerHTML = fname;
+                let ln = document.querySelector('#lname').innerHTML = lname;
+                let em = document.querySelector('#email').innerHTML = email;
+                let ps = document.querySelector('#password').innerHTML = password;
+                //console.log(fn.value)
+
+                var getSelectedValue = document.querySelector( 'input[name="gender"]:checked');   
+                if(getSelectedValue != null) {   
+                    getSelectedValue.value;  
+                } 
+
+                // using Jquery Radio Button
+
+                // var radioValue = $("input[name='gender']:checked").val();
+                // if(radioValue){
+                //     radioValue;
+                // }
+
+                let mydata = {
+                        "first_name": fn.value,
+                        "last_name": lname.value ,
+                        "email": email.value,
+                        "gender":getSelectedValue.value,
+                        "password": password.value
+                }
+
+                try {
+                    let res = axios.post("http://46fd-122-168-179-237.ngrok.io/api/users/userRegister",mydata)
+                    return res.json();
+                    console.log(res);
+
+                } catch (error) {
+                    console.log(error)
+                }
+
+                // debugger
+                // fetch('http://46fd-122-168-179-237.ngrok.io/api/users/userRegister',{
+                   
+                //     method:'POST',
+                //     mode:'cors',
+                //     body: JSON.stringify(mydata),
+                // })
+                // .then(res=>res.json())
+                // .then((data)=>{
+                //     console.log(data)
+                // }).catch((e)=>{
+                //     console.log(e)
+                // })
+
+
+
+                // let res = axios.post("http://46fd-122-168-179-237.ngrok.io/api/users/userRegister",mydata)
+                // debugger
+            })
+            let getData = (e)=>{
+                
+            //     let postMyData = async ()=>{
+            //         let detD = await axios.post('http://7e10-122-168-179-237.ngrok.io/api/users/userRegister',{                
+            //             "first_name": fname,
+            //             "last_name": lname ,
+            //             "email": email,
+            //             "gender": gender,
+            //             "password": password
+            //         })
+            //         return await detD.json();
+            //         console.log(detD.data)
+            //     }
+             }
+        </script>
+    </body>
+</html>

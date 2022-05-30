@@ -14,35 +14,39 @@
     </head>
     <body>
         <form class="offset-4 w-25 border bg-dark p-3 rounded mt-5">
+
+            <h1 class="text-white text-center mt-3
+            ">Registration Form</h1>
+
             <div class="mb-3">
               <label for="fname" class="text-white" for="fname" class="form-label">First Name</label>
-              <input type="text" name="fname" onkeyup="handleKeyup()" class="form-control a_title" id="fname">
+              <input type="text" name="fname" onkeyup="handleKeyup()" class="form-control a_title" id="fname" required>
             </div>
 
             <div class="mb-3">
               <label for="lname" class="text-white" class="form-label">Last Name</label>
-              <input type="text" onkeyup="handleKeyup()" name="name" class="form-control a_title" id="lname">
+              <input type="text" onkeyup="handleKeyup()" name="lname" class="form-control a_title" id="lname" required>
             </div>
 
             <div class="mb-3">
 
                 <label for="gender" class="text-white" class="form-label">Female</label>
-                <input type="radio" name="gender" id="female"><br />
+                <input type="radio" name="gender" id="female" onchange="getData()"><br />
                 <label for="gender" class="text-white" class="form-label">Male</label>
-                <input type="radio" name="gender" id="male">
+                <input type="radio" name="gender" id="male" onchange="getData()">
             </div>
   
             <div class="mb-3">
                 <label for="email" class="text-white" class="form-label">Email Address</label>
-                <input type="email" name="email" onkeyup="handleKeyup()" class="form-control a_title" id="email">
+                <input type="email" name="email" onkeyup="handleKeyup()" class="form-control a_title" id="email" required>
               </div>
 
               <div class="mb-3">
                 <label for="password" class="text-white" class="form-label">Password</label>
-                <input type="password" name="password" onkeyup="handleKeyup()" class="form-control a_title" id="password">
+                <input type="password" name="password" onkeyup="handleKeyup()" class="form-control a_title" id="password" required>
               </div>
 
-              <button type="button" class="btn btn-success d-grid gap-2 mx-auto mt-5" onclick="getData()">Get Data</button>
+              <button type="submit" id="reg_btn" class="btn btn-success d-grid gap-2 mx-auto mt-5">Get Data</button>
         </form>
 
         <script>
@@ -50,34 +54,48 @@
                 //console.log("changed");
                 let fname = document.getElementById('fname').value;
                 let lname = document.getElementById('lname').value;
-                var gender = document.getElementsByName('gender');
+                
                 let email = document.getElementById('email').value;
                 let password = document.getElementById('password').value;
-                // console.log(fname);
-                // console.log(lname);
-                // console.log(ele);
-                // console.log(email);
-                // console.log(password);
-                for(i=0;i<gender.length;i++){
-                    if(gender[0].checked){
-                        gender.value;
-                    }else{
 
-                    }
-                }
+                console.log(fname);
+                console.log(lname);
+                console.log(email);
+                console.log(password);
+                
             }
-            let getData = ()=>{
+            var gender = document.getElementsByName('gender');
+            document.getElementById('reg_btn').addEventListener('click',(e)=>{
+                e.preventDefault()
                 console.log("okoko");
-                let getMyData = async ()=>{
-                    let detD = await axios.get('http://7e10-122-168-179-237.ngrok.io/api/users/userRegister',{                
-                        "first_name": fname,
+                console.log(e);
+                var gender = document.getElementsByName('gender');
+                for(i=0;i<gender.length;i++){
+                    if(gender[i].checked){
+                        gender.innerHTML = gender[i].value;
+                        console.log(i);
+                        console.log(gender[i].value)
+                    }
+                   
+                }
+                console.log(gender)
+                let mydata = {
+                    "first_name": fname,
                         "last_name": lname ,
                         "email": email,
-                        "gender": "female",
+                        //"gender": gender,
                         "password": password
-                    })
                 }
-            }
+                fetch('https://mycruddjangoapp.herokuapp.com/api/user/')
+                .then(res=>res.json())
+                .then((data)=>{
+                    console.log(data)
+                }).catch((e)=>{
+                    console.log(e)
+                })
+            
+            let getData = (e)=>{
+                
         </script>
     </body>
 </html>

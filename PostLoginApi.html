@@ -14,23 +14,8 @@
     </head>
     <body>
         <form class="offset-4 w-25 border bg-dark p-3 rounded mt-5">
-            <div class="mb-3">
-              <label for="fname" class="text-white" for="fname" class="form-label">First Name</label>
-              <input type="text" name="fname" onchange="handleChange()" class="form-control a_title" id="fname">
-            </div>
-
-            <div class="mb-3">
-              <label for="lname" class="text-white" class="form-label">Last Name</label>
-              <input type="text" onchange="handleChange()" name="name" class="form-control a_title" id="lname">
-            </div>
-
-            <div class="mb-3">
-                <label for="gender" class="text-white" class="form-label">Female</label>
-                <input type="radio" name="female" id="female"><br />
-                <label for="gender" class="text-white" class="form-label">Male</label>
-                <input type="radio" name="male" id="male">
-            </div>
-  
+            
+            <h3 class="text-white text-center mt-3">Login Form</h3><br />
             <div class="mb-3">
                 <label for="email" class="text-white" class="form-label">Email Address</label>
                 <input type="email" name="email" onchange="handleChange()" class="form-control a_title" id="email">
@@ -54,7 +39,7 @@
             let getData = ()=>{
                 console.log("okoko");
                 let getMyData = async ()=>{
-                    let detD = await axios.get('http://7e10-122-168-179-237.ngrok.io/api/users/userRegister',{                
+                    let detD = await axios.post('http://7e10-122-168-179-237.ngrok.io/api/users/userLogin',{                
                         "first_name": "kiran",
                         "last_name": "Rathor",
                         "email": "kiran@gmail.com",
